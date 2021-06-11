@@ -18,7 +18,7 @@ mod view;
 
 const GLOBAL_HOT_KEY: Selector<WindowId> = Selector::new("dev.untitled1.toggle-window-hotkey");
 const ESC_HOT_KEY: Selector = Selector::new("dev.untitled1.esc-hotkey");
-const EXEC_CMD: Selector = Selector::new("dev.untitled1.execute-command");
+const EXEC_CMD: Selector<Option<String>> = Selector::new("dev.untitled1.execute-command");
 
 pub fn main() {
     // let screen_rect = druid::Screen::get_display_rect();
@@ -100,13 +100,28 @@ impl AppDelegate<AppData> for Delegate {
             }
 
             Handled::Yes
-        } else if let Some(_) = cmd.get(EXEC_CMD) {
-            println!("Execute Command: {}", data.command_text);
-            let command = data.command_text.clone();
-            data.command_text.clear();
+        } else if let Some(payload) = cmd.get(EXEC_CMD) {
+            let command = match payload {
+                Some(p) => {
+                    if data.command_text.len() == 0 {
+                        Some(command_processor::Command::SingleChar(p.to_string()))
+                    } else {
+                        None
+                    }
+                }
+                None => Some(command_processor::Command::ColonPrefixed(
+                    data.command_text.to_string(),
+                )),
+            };
 
-            command_processor::process(_ctx, command, self.window_id);
-            Handled::Yes
+            command
+                .map(|com| {
+                    println!("Execute Command [{:?}]", com);
+                    data.command_text.clear();
+                    command_processor::process(_ctx, com, self.window_id);
+                    Handled::Yes
+                })
+                .unwrap_or(Handled::No)
         } else {
             Handled::No
         }
