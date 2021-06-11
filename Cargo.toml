@@ -1,0 +1,23 @@
+[package]
+name = "uiexperiment"
+version = "0.1.0"
+authors = ["Richard South <southy98@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#druid = {version = "0.7.0", features = ["im"] }
+#druid-shell = "0.7.0"
+#druid-derive = "0.4.0"
+druid = { git = "https://github.com/linebender/druid.git", features = [ "im" ] }
+
+log = "0.4.14"
+env_logger = "0.8.3"
+pretty_env_logger = "0.4.0"
+
+instant = "0.1.9"
+
+hotkey = "0.3.1"
+
+tracing = "0.1.26"
