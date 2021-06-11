@@ -24,6 +24,7 @@ impl<T, W: Widget<T>> Controller<T, W> for CommandBoxController {
                 ctx.set_handled();
             }
 
+            // Insert command
             Event::KeyDown(key_event) if key_event.key == KbKey::Character("i".to_string()) => {
                 println!("command box event(i) -> {:?}", key_event);
                 ctx.submit_command(EXEC_CMD.with(Some("i".to_string())).to(Target::Auto));

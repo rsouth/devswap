@@ -7,10 +7,24 @@ pub(crate) enum Command {
     SingleChar(String),
 }
 
-fn process_single_char_command(ctx: &mut DelegateCtx, command: Command, window_id: WindowId) {
+pub(crate) fn process(ctx: &mut DelegateCtx, command: Command, window_id: WindowId) {
+    println!("Processing command [{:?}]", command);
+    match command {
+        Command::ColonPrefixed(_) => process_colon_prefix_command(ctx, command, window_id),
+        Command::SingleChar(_) => process_single_char_command(ctx, command, window_id),
+    }
+}
+
+/// Process single-character commands
+/// e.g. `i` to switch to `insert mode`
+///
+fn process_single_char_command(_ctx: &mut DelegateCtx, command: Command, _window_id: WindowId) {
     println!("p_s_c_c {:?}", command);
 }
 
+/// Process colon-prefixed (vim-style) commands
+/// e.g. `:n` or `:new` to create a new project
+///
 fn process_colon_prefix_command(ctx: &mut DelegateCtx, command: Command, window_id: WindowId) {
     match command {
         Command::ColonPrefixed(command) => {
@@ -35,13 +49,5 @@ fn process_colon_prefix_command(ctx: &mut DelegateCtx, command: Command, window_
             }
         }
         _ => {}
-    }
-}
-
-pub(crate) fn process(ctx: &mut DelegateCtx, command: Command, window_id: WindowId) {
-    println!("Processing command [{:?}]", command);
-    match command {
-        Command::ColonPrefixed(_) => process_colon_prefix_command(ctx, command, window_id),
-        Command::SingleChar(_) => process_single_char_command(ctx, command, window_id),
     }
 }

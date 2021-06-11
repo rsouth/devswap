@@ -3,14 +3,12 @@
 
 use std::thread;
 
-use druid::commands::CONFIGURE_WINDOW;
-use druid::{
-    kurbo::Point, widget::prelude::*, AppDelegate, AppLauncher, Command, DelegateCtx, ExtEventSink,
-    Handled, HotKey, KbKey, Selector, Target, WindowConfig, WindowDesc, WindowId,
-};
+use druid::{AppLauncher, ExtEventSink, Selector, Target, WindowDesc, WindowId};
 
+use crate::app_delegate::Delegate;
 use crate::data::AppData;
 
+mod app_delegate;
 mod command_box;
 mod command_processor;
 mod data;
@@ -44,101 +42,7 @@ pub fn main() {
     app.launch(data).expect("launch failed");
 }
 
-struct Delegate {
-    window_id: WindowId,
-    hot_key_esc: HotKey,
-}
-impl Delegate {
-    fn new(winid: WindowId) -> Self {
-        Delegate {
-            window_id: winid,
-            hot_key_esc: HotKey::new(None, KbKey::Escape),
-        }
-    }
-}
-impl AppDelegate<AppData> for Delegate {
-    fn event(
-        &mut self,
-        _ctx: &mut DelegateCtx,
-        _window_id: WindowId,
-        event: Event,
-        _data: &mut AppData,
-        _env: &Env,
-    ) -> Option<Event> {
-        // println!("Event: {:?}", event);
-        match &event {
-            Event::KeyDown(key) if self.hot_key_esc.matches(key) => {
-                _ctx.submit_command(Command::from(ESC_HOT_KEY));
-            }
-            _ => (),
-        };
-
-        Some(event)
-    }
-
-    fn command(
-        &mut self,
-        _ctx: &mut DelegateCtx,
-        _target: Target,
-        cmd: &Command,
-        data: &mut AppData,
-        _env: &Env,
-    ) -> Handled {
-        if let Some(number) = cmd.get(GLOBAL_HOT_KEY) {
-            println!("Event sink got toggle visible event");
-            if data.toggle_window() {
-                println!("Showing window {:?}", number);
-                let wc = WindowConfig::default().set_position(Point { x: -0.0, y: 0.0 });
-                _ctx.submit_command(CONFIGURE_WINDOW.with(wc).to(*number));
-            } else {
-                println!("Hiding window {:?}", number);
-                let wc = WindowConfig::default().set_position(Point {
-                    x: -10000.0,
-                    y: 100.0,
-                });
-                _ctx.submit_command(CONFIGURE_WINDOW.with(wc).to(*number));
-            }
-
-            Handled::Yes
-        } else if let Some(payload) = cmd.get(EXEC_CMD) {
-            let command = match payload {
-                Some(p) => {
-                    if data.command_text.len() == 0 {
-                        Some(command_processor::Command::SingleChar(p.to_string()))
-                    } else {
-                        None
-                    }
-                }
-                None => Some(command_processor::Command::ColonPrefixed(
-                    data.command_text.to_string(),
-                )),
-            };
-
-            command
-                .map(|com| {
-                    println!("Execute Command [{:?}]", com);
-                    data.command_text.clear();
-                    command_processor::process(_ctx, com, self.window_id);
-                    Handled::Yes
-                })
-                .unwrap_or(Handled::No)
-        } else {
-            Handled::No
-        }
-    }
-
-    fn window_added(
-        &mut self,
-        id: WindowId,
-        _data: &mut AppData,
-        _env: &Env,
-        _ctx: &mut DelegateCtx,
-    ) {
-        println!("Window added, {:?}", id);
-    }
-}
-
-fn global_hotkey_listener(sink: ExtEventSink, winid: WindowId) {
+fn global_hotkey_listener(sink: ExtEventSink, window_id: WindowId) {
     thread::spawn(move || {
         let mut hk = hotkey::Listener::new();
         hk.register_hotkey(
@@ -146,13 +50,11 @@ fn global_hotkey_listener(sink: ExtEventSink, winid: WindowId) {
             'A' as u32,
             move || {
                 println!("Ctrl-Shift-A pressed!");
-                // println!("{:?}", main_window.id);
-
-                sink.submit_command(GLOBAL_HOT_KEY, winid, Target::Auto)
+                sink.submit_command(GLOBAL_HOT_KEY, window_id, Target::Auto)
                     .expect("command failed to submit");
             },
         )
-        .unwrap();
+        .expect("failed to register hotkey");
 
         hk.listen();
     });
