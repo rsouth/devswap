@@ -6,11 +6,14 @@ use std::thread;
 use druid::{AppLauncher, ExtEventSink, Selector, Target, WindowDesc, WindowId};
 
 use crate::app_delegate::Delegate;
+use crate::config::Settings;
 use crate::data::AppData;
+use std::rc::Rc;
 
 mod app_delegate;
 mod command_box;
 mod command_processor;
+mod config;
 mod data;
 mod view;
 
@@ -30,7 +33,11 @@ pub fn main() {
         .set_position((100.0, screen_rect.height() - win_height - 10.0))
         .window_size((screen_rect.width() * 0.333, win_height));
 
-    let data = AppData::default();
+    let mut data = AppData::default();
+    data.settings = Rc::new(Settings::load());
+
+    println!("Settings: {:?}", data.settings);
+
     let window_id = main_window.id;
     let app = AppLauncher::with_window(main_window)
         .log_to_console()

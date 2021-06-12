@@ -1,3 +1,4 @@
+use crate::config::Settings;
 use crate::data::AppData;
 use crate::{command_processor, ESC_HOT_KEY, EXEC_CMD, GLOBAL_HOT_KEY};
 use druid::commands::CONFIGURE_WINDOW;
@@ -74,7 +75,7 @@ impl AppDelegate<AppData> for Delegate {
                 .map(|com| {
                     println!("Execute Command [{:?}]", com);
                     data.command_text.clear();
-                    command_processor::process(_ctx, com, self.window_id);
+                    command_processor::process(_ctx, com, self.window_id, data);
                     Handled::Yes
                 })
                 .unwrap_or(Handled::No)
@@ -91,5 +92,15 @@ impl AppDelegate<AppData> for Delegate {
         _ctx: &mut DelegateCtx,
     ) {
         println!("Window added, {:?}", id);
+    }
+
+    fn window_removed(
+        &mut self,
+        _id: WindowId,
+        data: &mut AppData,
+        _env: &Env,
+        _ctx: &mut DelegateCtx,
+    ) {
+        Settings::save(&data.settings);
     }
 }
