@@ -1,5 +1,5 @@
 use crate::{ESC_HOT_KEY, EXEC_CMD};
-use druid::widget::Controller;
+use druid::widget::{Controller, TextBox};
 use druid::{Env, Event, EventCtx, KbKey, Target, Widget};
 
 pub(crate) struct CommandBoxController;
@@ -8,9 +8,16 @@ impl Default for CommandBoxController {
         CommandBoxController {}
     }
 }
-impl<T, W: Widget<T>> Controller<T, W> for CommandBoxController {
-    fn event(&mut self, child: &mut W, ctx: &mut EventCtx, event: &Event, data: &mut T, env: &Env) {
-        // println!("Evt: {:?}", event);
+
+impl Controller<String, TextBox<String>> for CommandBoxController {
+    fn event(
+        &mut self,
+        child: &mut TextBox<String>,
+        ctx: &mut EventCtx,
+        event: &Event,
+        data: &mut String,
+        env: &Env,
+    ) {
         match &event {
             // Esc to switch to Command mode
             Event::Command(x) if x.is(ESC_HOT_KEY) => {
@@ -26,9 +33,11 @@ impl<T, W: Widget<T>> Controller<T, W> for CommandBoxController {
 
             // Insert command
             Event::KeyDown(key_event) if key_event.key == KbKey::Character("i".to_string()) => {
-                println!("command box event(i) -> {:?}", key_event);
-                ctx.submit_command(EXEC_CMD.with(Some("i".to_string())).to(Target::Auto));
-                // ctx.set_handled();
+                if data.is_empty() {
+                    println!("command box event(i) -> {:?}", key_event);
+                    ctx.submit_command(EXEC_CMD.with(Some("i".to_string())).to(Target::Auto));
+                    ctx.set_handled();
+                }
             }
 
             _ => child.event(ctx, event, data, env),

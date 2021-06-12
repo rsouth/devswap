@@ -64,13 +64,7 @@ impl AppDelegate<AppData> for Delegate {
             Handled::Yes
         } else if let Some(payload) = cmd.get(EXEC_CMD) {
             let command = match payload {
-                Some(p) => {
-                    if data.command_text.len() == 0 {
-                        Some(command_processor::Command::SingleChar(p.to_string()))
-                    } else {
-                        None
-                    }
-                }
+                Some(p) => Some(command_processor::Command::SingleChar(p.to_string())),
                 None => Some(command_processor::Command::ColonPrefixed(
                     data.command_text.to_string(),
                 )),
