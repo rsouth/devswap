@@ -1,4 +1,4 @@
-use crate::config::Settings;
+use crate::config::{ProjectSettings, Settings};
 use crate::data::AppData;
 use crate::{command_processor, ESC_HOT_KEY, EXEC_CMD, GLOBAL_HOT_KEY};
 use druid::commands::CONFIGURE_WINDOW;
@@ -101,6 +101,10 @@ impl AppDelegate<AppData> for Delegate {
         _env: &Env,
         _ctx: &mut DelegateCtx,
     ) {
-        Settings::save(&data.settings);
+        let data = data.get_settings_mut();
+        data.update("devswap".to_string(), ProjectSettings {});
+        println!("{:?}", data);
+        // let ll = *data.borrow();
+        Settings::save(data);
     }
 }

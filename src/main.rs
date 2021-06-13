@@ -1,5 +1,6 @@
 #![feature(str_split_whitespace_as_str)]
 #![feature(iter_intersperse)]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::thread;
 
@@ -8,7 +9,6 @@ use druid::{AppLauncher, ExtEventSink, Selector, Target, WindowDesc, WindowId};
 use crate::app_delegate::Delegate;
 use crate::config::Settings;
 use crate::data::AppData;
-use std::rc::Rc;
 
 mod app_delegate;
 mod command_box;
@@ -34,9 +34,9 @@ pub fn main() {
         .window_size((screen_rect.width() * 0.333, win_height));
 
     let mut data = AppData::default();
-    data.settings = Rc::new(Settings::load());
+    data.replace_settings(Settings::load());
 
-    println!("Settings: {:?}", data.settings);
+    println!("Settings: {:?}", data.get_settings());
 
     let window_id = main_window.id;
     let app = AppLauncher::with_window(main_window)

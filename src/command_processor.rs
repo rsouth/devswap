@@ -60,7 +60,7 @@ fn process_colon_prefix_command(
             //
             // save settings ...
             Some(":ws") => {
-                Settings::save(&data.settings);
+                Settings::save(data.get_settings());
             }
             None => {}
             _ => {}

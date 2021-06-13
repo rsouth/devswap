@@ -2,12 +2,11 @@ use crate::config;
 use crate::config::Settings;
 use druid::Data;
 use druid::Lens;
-use std::rc::Rc;
 use std::sync::Arc;
 
 #[derive(Debug, Clone, Data, Lens)]
 pub struct AppData {
-    pub settings: Rc<config::Settings>,
+    settings: config::Settings,
     display_window_x: f64,
     display_window_y: f64,
     window_visible: bool,
@@ -18,7 +17,7 @@ pub struct AppData {
 impl Default for AppData {
     fn default() -> Self {
         AppData {
-            settings: Rc::new(Settings::default()),
+            settings: Settings::default(),
             display_window_x: 0.0,
             display_window_y: 0.0,
             window_visible: true,
@@ -32,5 +31,17 @@ impl AppData {
     pub(crate) fn toggle_window(&mut self) -> bool {
         self.window_visible = !self.window_visible;
         self.window_visible
+    }
+
+    pub fn get_settings(&self) -> &Settings {
+        &self.settings
+    }
+
+    pub fn get_settings_mut(&mut self) -> &mut Settings {
+        &mut self.settings
+    }
+
+    pub fn replace_settings(&mut self, settings: Settings) {
+        self.settings = settings;
     }
 }
