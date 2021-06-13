@@ -1,23 +1,29 @@
 use crate::command_box::CommandBoxController;
 use crate::AppData;
-use druid::widget::{CrossAxisAlignment, Flex, FlexParams, Label, TextBox};
-use druid::{FontDescriptor, FontFamily, Insets, Widget, WidgetExt};
+use druid::widget::{CrossAxisAlignment, Flex, FlexParams, Label, TextBox, WidgetWrapper};
+use druid::{FontDescriptor, FontFamily, Insets, LensExt, Widget, WidgetExt};
+use std::borrow::{Borrow, BorrowMut};
 
 pub fn ui_builder() -> impl Widget<AppData> {
     Flex::column()
+        //
         // Title row
         .with_child(header_row())
         .with_default_spacer()
+        //
         // text box
         .with_flex_child(text_area(), 1.0)
         .with_default_spacer()
+        //
         // command row
         .with_child(command_row())
         .with_default_spacer()
-        // // status row
-        // .with_child(bottom_row())
         .padding(Insets::new(10_f64, 10_f64, 10_f64, 10_f64))
+        //
+        // debugging
         .debug_paint_layout()
+        .debug_widget_id()
+        .debug_invalidation()
 }
 
 fn header_row() -> impl Widget<AppData> {
