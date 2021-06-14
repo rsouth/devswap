@@ -4,15 +4,15 @@
 
 use std::thread;
 
-use druid::{AppLauncher, Env, ExtEventSink, Selector, Target, WindowDesc, WindowId};
+use druid::{AppLauncher, ExtEventSink, Selector, Target, WindowDesc, WindowId};
 
 use crate::app_delegate::Delegate;
 use crate::config::Settings;
 use crate::data::AppData;
 
 mod app_delegate;
+mod command;
 mod command_box;
-mod command_processor;
 mod config;
 mod data;
 mod view;
@@ -40,7 +40,7 @@ pub fn main() {
 
     let window_id = main_window.id;
     let app = AppLauncher::with_window(main_window)
-        .configure_env(|mut e, a| {})
+        .configure_env(|_e, _a| {})
         .log_to_console()
         .delegate(Delegate::new(window_id));
 

@@ -1,8 +1,7 @@
 use crate::command_box::CommandBoxController;
 use crate::AppData;
-use druid::widget::{CrossAxisAlignment, Flex, FlexParams, Label, TextBox, WidgetWrapper};
-use druid::{FontDescriptor, FontFamily, Insets, LensExt, Widget, WidgetExt};
-use std::borrow::{Borrow, BorrowMut};
+use druid::widget::{CrossAxisAlignment, Flex, FlexParams, Label, TextBox};
+use druid::{FontDescriptor, FontFamily, Insets, Widget, WidgetExt};
 
 pub fn ui_builder() -> impl Widget<AppData> {
     Flex::column()
