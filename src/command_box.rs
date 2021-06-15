@@ -24,6 +24,7 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
                 println!("Entering Command mode");
                 ctx.request_focus();
             }
+
             // Enter to execute Command
             Event::KeyDown(key_event) if key_event.key == KbKey::Enter => {
                 println!("command_box event(Enter) -> {:?}", key_event);
@@ -40,6 +41,13 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
                 }
             }
 
+            // Command history (Up/Down arrows)
+            Event::KeyDown(key_event)
+                if key_event.key == KbKey::ArrowUp || key_event.key == KbKey::ArrowDown =>
+            {
+                println!("History: {}", key_event.key);
+                // todo may need to change payload to support more data
+            }
             _ => child.event(ctx, event, data, env),
         }
     }
