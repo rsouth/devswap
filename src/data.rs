@@ -1,7 +1,7 @@
 use crate::config;
 use crate::config::Settings;
 use druid::Lens;
-use druid::{ArcStr, Data};
+use druid::{Data};
 
 #[derive(Debug, Clone, Data, Lens)]
 pub struct AppState {

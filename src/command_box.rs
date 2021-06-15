@@ -1,7 +1,7 @@
 use crate::{ESC_HOT_KEY, EXEC_CMD};
-use druid::widget::{Controller, Either, TextBox};
+use druid::widget::{Controller, TextBox};
 use druid::{Env, Event, EventCtx, KbKey, Target, Widget};
-use std::borrow::BorrowMut;
+
 
 pub(crate) struct CommandBoxController;
 impl Default for CommandBoxController {

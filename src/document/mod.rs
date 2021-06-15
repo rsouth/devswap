@@ -1,4 +1,4 @@
-use druid::{im, Data};
+use druid::{Data};
 
 #[derive(Data, Debug, Clone)]
 struct Header {
