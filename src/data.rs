@@ -44,4 +44,8 @@ impl AppState {
     pub fn replace_settings(&mut self, settings: Settings) {
         self.settings = settings;
     }
+
+    pub fn add_to_command_history(&mut self, cmd: &str) {
+        self.settings.add_to_command_history(cmd);
+    }
 }

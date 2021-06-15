@@ -16,6 +16,7 @@ impl<'r> SaveSettings<'r> {
 impl Executable for SaveSettings<'_> {
     fn execute(&mut self) -> Result<u128, ExecutionError> {
         println!("Command: Saving Settings");
+
         Settings::save(self.app_data.get_settings());
         Ok(0)
     }

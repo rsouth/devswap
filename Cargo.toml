@@ -10,7 +10,7 @@ edition = "2018"
 #druid = {version = "0.7.0", features = ["im"] }
 #druid-shell = "0.7.0"
 #druid-derive = "0.4.0"
-druid = { git = "https://github.com/linebender/druid.git", features = [ "im" ] }
+druid = { git = "https://github.com/linebender/druid.git", features = [ "im", "serde" ] }
 
 log = "0.4.14"
 env_logger = "0.8.3"

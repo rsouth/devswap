@@ -68,6 +68,7 @@ impl AppDelegate<AppState> for Delegate {
             data.command_text.clear();
             match payload {
                 Some(p) => {
+                    data.add_to_command_history(p);
                     return match command::resolve(p.to_string(), ctx, data) {
                         Ok(mut ec) => {
                             println!("Executing EC");
