@@ -1,17 +1,21 @@
 mod insert_mode;
 pub mod new_project;
+mod save_settings;
 
 use crate::command::insert_mode::InsertMode;
 use crate::command::new_project::NewProject;
+use crate::command::save_settings::SaveSettings;
 use crate::command::Identity::{Parameterised, Simple};
 use crate::data::AppState;
 use druid::DelegateCtx;
 use std::convert::TryFrom;
 use std::fmt::{Display, Formatter};
 
+#[rustfmt::skip]
 lazy_static! {
     static ref CMD_NEW_PROJ: Identity = Parameterised(":n".to_string(), ":new".to_string());
     static ref CMD_INSERT_MODE: Identity = Simple("i".to_string());
+    static ref CMD_SAVE_SETTINGS: Identity = Parameterised(":ws".to_string(), ":write-settings".to_string());
 }
 
 /// `Identity` defines an `Executable`.
@@ -88,6 +92,9 @@ pub fn resolve<'r>(
             } else if CMD_INSERT_MODE.matches(&selector) {
                 println!("Found Insert Mode Command");
                 Ok(Box::new(InsertMode::new(app_data, ctx)))
+            } else if CMD_SAVE_SETTINGS.matches(&selector) {
+                println!("Found Save Settings Command");
+                Ok(Box::new(SaveSettings::new(app_data)))
             } else {
                 Err(ParsingError)
             }
