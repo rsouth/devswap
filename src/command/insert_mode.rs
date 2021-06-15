@@ -1,6 +1,6 @@
 use druid::DelegateCtx;
 
-use crate::command::{Executable, ExecutionError, HasArguments};
+use crate::command::{Executable, ExecutionError};
 use crate::data;
 use crate::data::AppState;
 

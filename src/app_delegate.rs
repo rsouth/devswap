@@ -1,12 +1,12 @@
-use crate::command::Executable;
-use crate::config::{ProjectSettings, Settings};
-use crate::data::AppState;
-use crate::{command, ESC_HOT_KEY, EXEC_CMD, GLOBAL_HOT_KEY};
 use druid::commands::CONFIGURE_WINDOW;
 use druid::{
     AppDelegate, Command, DelegateCtx, Env, Event, Handled, HotKey, KbKey, Point, Target,
     WindowConfig, WindowId,
 };
+
+use crate::config::{ProjectSettings, Settings};
+use crate::data::AppState;
+use crate::{command, ESC_HOT_KEY, EXEC_CMD, GLOBAL_HOT_KEY};
 
 pub(crate) struct Delegate {
     _window_id: WindowId,
