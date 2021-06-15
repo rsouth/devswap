@@ -5,7 +5,7 @@ use druid::Lens;
 use std::sync::Arc;
 
 #[derive(Debug, Clone, Data, Lens)]
-pub struct AppData {
+pub struct AppState {
     settings: config::Settings,
     display_window_x: f64,
     display_window_y: f64,
@@ -14,9 +14,9 @@ pub struct AppData {
     pub(crate) command_text: String,
 }
 
-impl Default for AppData {
+impl Default for AppState {
     fn default() -> Self {
-        AppData {
+        AppState {
             settings: Settings::default(),
             display_window_x: 0.0,
             display_window_y: 0.0,
@@ -27,7 +27,7 @@ impl Default for AppData {
     }
 }
 
-impl AppData {
+impl AppState {
     pub(crate) fn toggle_window(&mut self) -> bool {
         self.window_visible = !self.window_visible;
         self.window_visible

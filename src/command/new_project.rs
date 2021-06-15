@@ -1,13 +1,13 @@
 use druid::DelegateCtx;
 
-use crate::command::{CommandExecutionError, Executable, HasArguments};
+use crate::command::{Executable, ExecutionError, HasArguments};
 use crate::data;
-use crate::data::AppData;
+use crate::data::AppState;
 
 pub(crate) struct NewProject<'r> {
     file_name: String,
     args: String,
-    _app_data: &'r AppData,
+    _app_data: &'r AppState,
     _ctx: &'r DelegateCtx<'r>,
 }
 
@@ -15,7 +15,7 @@ impl<'r> NewProject<'r> {
     pub fn new(
         file_name: &str,
         args: String,
-        app_data: &'r mut data::AppData,
+        app_data: &'r mut data::AppState,
         ctx: &'r druid::DelegateCtx<'r>,
     ) -> Self {
         NewProject {
@@ -48,10 +48,10 @@ impl HasArguments for NewProject<'_> {
 }
 
 impl Executable for NewProject<'_> {
-    fn execute(&mut self) -> Result<u128, CommandExecutionError> {
+    fn execute(&mut self) -> Result<u128, ExecutionError> {
         self.process_args();
         println!("New project [{:#?}]", self.file_name);
 
-        Err(CommandExecutionError)
+        Err(ExecutionError)
     }
 }

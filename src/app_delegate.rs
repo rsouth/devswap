@@ -1,6 +1,6 @@
 use crate::command::Executable;
 use crate::config::{ProjectSettings, Settings};
-use crate::data::AppData;
+use crate::data::AppState;
 use crate::{command, ESC_HOT_KEY, EXEC_CMD, GLOBAL_HOT_KEY};
 use druid::commands::CONFIGURE_WINDOW;
 use druid::{
@@ -20,13 +20,13 @@ impl Delegate {
         }
     }
 }
-impl AppDelegate<AppData> for Delegate {
+impl AppDelegate<AppState> for Delegate {
     fn event(
         &mut self,
         ctx: &mut DelegateCtx,
         _window_id: WindowId,
         event: Event,
-        _data: &mut AppData,
+        _data: &mut AppState,
         _env: &Env,
     ) -> Option<Event> {
         // println!("Event: {:?}", event);
@@ -45,7 +45,7 @@ impl AppDelegate<AppData> for Delegate {
         ctx: &mut DelegateCtx,
         _target: Target,
         cmd: &Command,
-        data: &mut AppData,
+        data: &mut AppState,
         _env: &Env,
     ) -> Handled {
         if let Some(number) = cmd.get(GLOBAL_HOT_KEY) {
@@ -65,11 +65,10 @@ impl AppDelegate<AppData> for Delegate {
 
             Handled::Yes
         } else if let Some(payload) = cmd.get(EXEC_CMD) {
-            //
             data.command_text.clear();
             match payload {
                 Some(p) => {
-                    return match command::resolve(p.to_string(), &*ctx, data) {
+                    return match command::resolve(p.to_string(), ctx, data) {
                         Ok(mut ec) => {
                             println!("Executing EC");
                             ec.execute().map_or(Handled::No, |d| {
@@ -83,22 +82,8 @@ impl AppDelegate<AppData> for Delegate {
                         }
                     };
                 }
-                None => {
-                    // Some(command::CommandSelector::ColonPrefixed(
-                    //     data.command_text.to_string(),
-                    // ))
-                    Handled::No
-                }
+                None => Handled::No,
             }
-
-            // command
-            //     .map(|com| {
-            //         println!("Execute Command [{:?}]", com);
-            //         data.command_text.clear();
-            //         command_processor::process(_ctx, com, self.window_id, data);
-            //         Handled::Yes
-            //     })
-            //     .unwrap_or(Handled::No)
         } else {
             Handled::No
         }
@@ -107,7 +92,7 @@ impl AppDelegate<AppData> for Delegate {
     fn window_added(
         &mut self,
         id: WindowId,
-        _data: &mut AppData,
+        _data: &mut AppState,
         _env: &Env,
         _ctx: &mut DelegateCtx,
     ) {
@@ -117,7 +102,7 @@ impl AppDelegate<AppData> for Delegate {
     fn window_removed(
         &mut self,
         _id: WindowId,
-        data: &mut AppData,
+        data: &mut AppState,
         _env: &Env,
         _ctx: &mut DelegateCtx,
     ) {

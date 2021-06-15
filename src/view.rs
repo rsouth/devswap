@@ -1,9 +1,9 @@
 use crate::command_box::CommandBoxController;
-use crate::AppData;
+use crate::AppState;
 use druid::widget::{CrossAxisAlignment, Flex, FlexParams, Label, TextBox};
 use druid::{FontDescriptor, FontFamily, Insets, Widget, WidgetExt};
 
-pub fn ui_builder() -> impl Widget<AppData> {
+pub fn ui_builder() -> impl Widget<AppState> {
     Flex::column()
         //
         // Title row
@@ -25,7 +25,7 @@ pub fn ui_builder() -> impl Widget<AppData> {
         .debug_invalidation()
 }
 
-fn header_row() -> impl Widget<AppData> {
+fn header_row() -> impl Widget<AppState> {
     Flex::row().with_flex_child(
         Label::new(" ~ echo \"headspace\" > /dev/swap".to_string())
             .with_font(FontDescriptor::new(FontFamily::MONOSPACE).with_size(16.0)),
@@ -33,17 +33,17 @@ fn header_row() -> impl Widget<AppData> {
     )
 }
 
-fn text_area() -> impl Widget<AppData> {
-    TextBox::multiline().lens(AppData::current_text).expand()
+fn text_area() -> impl Widget<AppState> {
+    TextBox::multiline().lens(AppState::current_text).expand()
 }
 
-fn command_row() -> impl Widget<AppData> {
+fn command_row() -> impl Widget<AppState> {
     Flex::row()
         .with_flex_child(
             TextBox::new()
                 .with_placeholder("[Esc] for command mode; :e to edit previous")
                 .controller(CommandBoxController::default())
-                .lens(AppData::command_text)
+                .lens(AppState::command_text)
                 .expand_width(),
             FlexParams::new(1., CrossAxisAlignment::Start),
         )

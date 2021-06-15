@@ -2,13 +2,16 @@
 #![feature(iter_intersperse)]
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+#[macro_use]
+extern crate lazy_static;
+
 use std::thread;
 
 use druid::{AppLauncher, ExtEventSink, Selector, Target, WindowDesc, WindowId};
 
 use crate::app_delegate::Delegate;
 use crate::config::Settings;
-use crate::data::AppData;
+use crate::data::AppState;
 
 mod app_delegate;
 mod command;
@@ -33,7 +36,7 @@ pub fn main() {
         .set_position((100.0, screen_rect.height() - win_height - 10.0))
         .window_size((screen_rect.width() * 0.333, win_height));
 
-    let mut data = AppData::default();
+    let mut data = AppState::default();
     data.replace_settings(Settings::load());
 
     println!("Settings: {:?}", data.get_settings());
