@@ -47,7 +47,7 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
             #[rustfmt::skip]
             Event::KeyDown(key_event) if matches!(key_event.key, KbKey::ArrowUp | KbKey::ArrowDown) => {
                 println!("History: {}", key_event.key);
-child.
+
                 // todo may need to change payload to support more data
             }
             _ => child.event(ctx, event, data, env),
