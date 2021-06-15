@@ -91,6 +91,14 @@ impl Settings {
 
         println!("Command history: {:?}", self.command_history);
     }
+
+    pub fn push_doc(&mut self, doc: String) {
+        self.document_stack.push_front(doc);
+    }
+
+    pub fn pop_doc(&mut self) -> String {
+        self.document_stack.pop_front().unwrap_or("".to_string())
+    }
 }
 
 fn default_cursor_position() -> usize {

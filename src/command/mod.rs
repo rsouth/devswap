@@ -6,6 +6,7 @@ mod show_help;
 use crate::command::insert_mode::InsertMode;
 use crate::command::new_project::NewProject;
 use crate::command::save_settings::SaveSettings;
+use crate::command::show_help::ShowHelp;
 use crate::command::Identity::{Parameterised, Simple};
 use crate::data::AppState;
 use druid::DelegateCtx;
@@ -15,8 +16,10 @@ use std::fmt::{Display, Formatter};
 #[rustfmt::skip]
 lazy_static! {
     static ref CMD_NEW_PROJ: Identity = Parameterised(":n".to_string(), ":new".to_string());
-    static ref CMD_INSERT_MODE: Identity = Simple("i".to_string());
     static ref CMD_SAVE_SETTINGS: Identity = Parameterised(":ws".to_string(), ":write-settings".to_string());
+    static ref CMD_SHOW_HELP: Identity = Parameterised(":h".to_string(), ":help".to_string());
+    
+    static ref CMD_INSERT_MODE: Identity = Simple("i".to_string());
 }
 
 /// `Identity` defines an `Executable`.
@@ -96,6 +99,9 @@ pub fn resolve<'r>(
             } else if CMD_SAVE_SETTINGS.matches(&selector) {
                 println!("Found Save Settings Command");
                 Ok(Box::new(SaveSettings::new(app_data)))
+            } else if CMD_SHOW_HELP.matches(&selector) {
+                println!("Got Show Help Command");
+                Ok(Box::new(ShowHelp::new(app_data)))
             } else {
                 Err(ParsingError)
             }
