@@ -1,6 +1,7 @@
 mod insert_mode;
 pub mod new_project;
 mod save_settings;
+mod show_help;
 
 use crate::command::insert_mode::InsertMode;
 use crate::command::new_project::NewProject;

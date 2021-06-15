@@ -108,7 +108,7 @@ impl AppDelegate<AppState> for Delegate {
         _ctx: &mut DelegateCtx,
     ) {
         let data = data.get_settings_mut();
-        data.update("devswap".to_string(), ProjectSettings {});
+        data.update("devswap".to_string(), ProjectSettings::default());
         println!("{:?}", data);
         // let ll = *data.borrow();
         Settings::save(data);

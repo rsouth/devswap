@@ -18,6 +18,7 @@ mod command;
 mod command_box;
 mod config;
 mod data;
+mod document;
 mod view;
 
 const GLOBAL_HOT_KEY: Selector<WindowId> = Selector::new("dev.untitled1.toggle-window-hotkey");

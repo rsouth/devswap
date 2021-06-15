@@ -1,6 +1,7 @@
 use crate::{ESC_HOT_KEY, EXEC_CMD};
-use druid::widget::{Controller, TextBox};
+use druid::widget::{Controller, Either, TextBox};
 use druid::{Env, Event, EventCtx, KbKey, Target, Widget};
+use std::borrow::BorrowMut;
 
 pub(crate) struct CommandBoxController;
 impl Default for CommandBoxController {
@@ -26,6 +27,7 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
             }
 
             // Enter to execute Command
+            // todo look at `send_notification_on_return`
             Event::KeyDown(key_event) if key_event.key == KbKey::Enter => {
                 println!("command_box event(Enter) -> {:?}", key_event);
                 ctx.submit_command(EXEC_CMD.with(Some((*data).to_string())).to(Target::Auto));
@@ -42,10 +44,10 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
             }
 
             // Command history (Up/Down arrows)
-            Event::KeyDown(key_event)
-                if key_event.key == KbKey::ArrowUp || key_event.key == KbKey::ArrowDown =>
-            {
+            #[rustfmt::skip]
+            Event::KeyDown(key_event) if matches!(key_event.key, KbKey::ArrowUp | KbKey::ArrowDown) => {
                 println!("History: {}", key_event.key);
+child.
                 // todo may need to change payload to support more data
             }
             _ => child.event(ctx, event, data, env),

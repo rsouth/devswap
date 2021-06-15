@@ -16,10 +16,26 @@ pub struct Settings {
 
     #[serde(default = "default_command_history")]
     command_history_size: usize,
+
+    #[serde(default = "im::Vector::new")]
+    document_stack: im::Vector<String>,
 }
 
 #[derive(Data, Serialize, Deserialize, Debug, Clone)]
-pub struct ProjectSettings {}
+pub struct ProjectSettings {
+    // let x = child.text().borrow().selection().active;
+    #[serde(default = "default_cursor_position")]
+    last_cursor_position: usize,
+    // also see Selection::anchor
+    // last_scroll_position?
+}
+impl Default for ProjectSettings {
+    fn default() -> Self {
+        ProjectSettings {
+            last_cursor_position: 0,
+        }
+    }
+}
 
 impl Default for Settings {
     fn default() -> Self {
@@ -28,6 +44,7 @@ impl Default for Settings {
             project_settings: im::hashmap![],
             command_history: im::vector![],
             command_history_size: 100,
+            document_stack: im::vector![],
         }
     }
 }
@@ -74,6 +91,10 @@ impl Settings {
 
         println!("Command history: {:?}", self.command_history);
     }
+}
+
+fn default_cursor_position() -> usize {
+    0
 }
 
 fn default_command_history() -> usize {
