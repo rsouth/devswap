@@ -27,5 +27,3 @@ impl Header {
 // thoughts on last_saved_ts - periodically save to a tmp file regardless if the user saves the
 //                             file, that way system shutdowns etc don't lose data; always appreciated
 //                             sublime not expecting me to save!
-
-// idea: :md command to render as markdown, for 'reading mode' :)

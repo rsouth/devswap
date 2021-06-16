@@ -1,5 +1,6 @@
 #![feature(str_split_whitespace_as_str)]
 #![feature(iter_intersperse)]
+#![feature(path_try_exists)]
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 #[macro_use]

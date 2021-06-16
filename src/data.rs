@@ -52,10 +52,10 @@ impl AppState {
     pub fn push_doc(&mut self, doc: &Header) {
         println!("push docs: {:?}", &doc);
         if let DocType::FileBased(_) = doc.doc_type {
-            self.settings.push_doc(&doc);
+            self.settings.push_doc(doc);
         }
 
-        self.switch_doc(&doc);
+        self.switch_doc(doc);
     }
 
     fn switch_doc(&mut self, header: &Header) {

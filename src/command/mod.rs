@@ -132,3 +132,6 @@ trait HasArguments {
     fn args(&self) -> String;
     fn process_args(&mut self);
 }
+
+// idea: :md command to render as markdown, for 'reading mode' :)
+// idea: :swp for scratchpad; doesn't create a file on disk
