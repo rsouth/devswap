@@ -1,7 +1,8 @@
 use crate::config;
 use crate::config::Settings;
+use crate::document::{DocType, Header};
+use druid::Data;
 use druid::Lens;
-use druid::{Data};
 
 #[derive(Debug, Clone, Data, Lens)]
 pub struct AppState {
@@ -48,15 +49,39 @@ impl AppState {
         self.settings.add_to_command_history(cmd);
     }
 
-    pub fn push_doc(&mut self, doc: &str) {
-        println!("push docs: {}", doc);
-        self.settings.push_doc(doc.to_string());
-        self.current_text.clear();
-        self.current_text.push_str(doc);
-        self.current_text = doc.to_string();
+    pub fn push_doc(&mut self, doc: Header) {
+        println!("push docs: {:?}", &doc);
+        if let DocType::FileBased(_) = doc.doc_type {
+            self.settings.push_doc(&doc);
+        }
+
+        self.switch_doc(&doc);
     }
 
-    pub fn pop_doc(&mut self) -> String {
-        self.settings.pop_doc()
+    fn switch_doc(&mut self, header: &Header) {
+        match &header.doc_type {
+            DocType::FileBased(file_name) => {
+                println!("Load file {} here...", &file_name);
+            }
+            DocType::Hardcoded(content) => {
+                println!("Switching to hardcoded content here...");
+                self.current_text.clear();
+                self.current_text = content.clone();
+            }
+            DocType::Empty => {
+                self.current_text.clear();
+            }
+        }
+    }
+
+    pub fn pop_doc(&mut self) {
+        match self.settings.pop_doc() {
+            None => {
+                self.current_text.clear();
+            }
+            Some(new_doc) => {
+                self.switch_doc(&new_doc);
+            }
+        }
     }
 }

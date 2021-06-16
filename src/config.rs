@@ -1,4 +1,5 @@
-use druid::{im, Data};
+use crate::document::Header;
+use druid::{im, ArcStr, Data};
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 
@@ -18,7 +19,7 @@ pub struct Settings {
     command_history_size: usize,
 
     #[serde(default = "im::Vector::new")]
-    document_stack: im::Vector<String>,
+    document_stack: im::Vector<crate::document::Header>,
 }
 
 #[derive(Data, Serialize, Deserialize, Debug, Clone)]
@@ -92,12 +93,12 @@ impl Settings {
         println!("Command history: {:?}", self.command_history);
     }
 
-    pub fn push_doc(&mut self, doc: String) {
-        self.document_stack.push_front(doc);
+    pub fn push_doc(&mut self, doc: &Header) {
+        self.document_stack.push_front(doc.clone());
     }
 
-    pub fn pop_doc(&mut self) -> String {
-        self.document_stack.pop_front().unwrap_or("".to_string())
+    pub fn pop_doc(&mut self) -> Option<Header> {
+        self.document_stack.pop_front().or(None)
     }
 }
 

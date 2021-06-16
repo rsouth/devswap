@@ -1,6 +1,7 @@
 use crate::command::{Executable, ExecutionError};
 use crate::data;
 use crate::data::AppState;
+use crate::document::{DocType, Header};
 
 #[rustfmt::skip]
 lazy_static! {
@@ -18,12 +19,16 @@ impl<'r> ShowHelp<'r> {
     pub fn new(app_data: &'r mut data::AppState) -> Self {
         ShowHelp { app_data }
     }
+
+    fn halp(&self) -> Header {
+        Header::new(DocType::Hardcoded(help_text.to_string()))
+    }
 }
 
 impl Executable for ShowHelp<'_> {
     fn execute(&mut self) -> Result<u128, ExecutionError> {
         println!("Command: Showing Help");
-        self.app_data.push_doc(&help_text);
+        self.app_data.push_doc(self.halp());
         Ok(0)
     }
 }
