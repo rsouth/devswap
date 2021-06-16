@@ -1,10 +1,6 @@
-use druid::{ArcStr, Data};
+use druid::Data;
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
 
-use serde_with::{serde_as, DisplayFromStr};
-
-#[serde_as]
 #[derive(Data, Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub enum DocType {
     FileBased(String), // i.e. actual files, read from disk

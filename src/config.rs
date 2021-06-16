@@ -1,5 +1,5 @@
 use crate::document::Header;
-use druid::{im, ArcStr, Data};
+use druid::{im, Data};
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 

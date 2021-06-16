@@ -49,7 +49,7 @@ impl AppState {
         self.settings.add_to_command_history(cmd);
     }
 
-    pub fn push_doc(&mut self, doc: Header) {
+    pub fn push_doc(&mut self, doc: &Header) {
         println!("push docs: {:?}", &doc);
         if let DocType::FileBased(_) = doc.doc_type {
             self.settings.push_doc(&doc);

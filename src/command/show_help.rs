@@ -5,8 +5,8 @@ use crate::document::{DocType, Header};
 
 #[rustfmt::skip]
 lazy_static! {
-    static ref help_text: String = 
-    "\t🚀 /dev/swap - swapfile for your noggin\n\
+    static ref HELP_TEXT: String = 
+    "\t\u{1f680} /dev/swap - swapfile for your noggin\n\
      \tversion 2021.06.15\n\n\
        What's all this then?".to_string();
 }
@@ -20,15 +20,15 @@ impl<'r> ShowHelp<'r> {
         ShowHelp { app_data }
     }
 
-    fn halp(&self) -> Header {
-        Header::new(DocType::Hardcoded(help_text.to_string()))
+    fn halp() -> Header {
+        Header::new(DocType::Hardcoded(HELP_TEXT.to_string()))
     }
 }
 
 impl Executable for ShowHelp<'_> {
     fn execute(&mut self) -> Result<u128, ExecutionError> {
         println!("Command: Showing Help");
-        self.app_data.push_doc(self.halp());
+        self.app_data.push_doc(&ShowHelp::halp());
         Ok(0)
     }
 }
