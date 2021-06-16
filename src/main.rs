@@ -8,7 +8,7 @@ extern crate lazy_static;
 
 use std::thread;
 
-use druid::{AppLauncher, ExtEventSink, Selector, Target, WindowDesc, WindowId};
+use druid::{AppLauncher, ExtEventSink, Rect, Selector, Target, WindowDesc, WindowId};
 
 use crate::app_delegate::Delegate;
 use crate::config::Settings;
@@ -27,10 +27,13 @@ const ESC_HOT_KEY: Selector = Selector::new("dev.untitled1.esc-hotkey");
 const EXEC_CMD: Selector<Option<String>> = Selector::new("dev.untitled1.execute-command");
 
 pub fn main() {
-    // let screen_rect = druid::Screen::get_display_rect();
-    let screen_rect = druid::Screen::get_monitors()[0].virtual_work_rect();
-
+    let screen_rect = if cfg!(windows) {
+        druid::Screen::get_display_rect()
+    } else {
+        Rect::new(0_f64, 0_f64, 1600_f64, 2000_f64)
+    };
     let win_height = screen_rect.height() * 0.777;
+
     let main_window = WindowDesc::new(view::ui_builder())
         .title("/dev/swap sandbox")
         // .transparent(true)
