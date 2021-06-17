@@ -30,7 +30,7 @@ pub fn main() {
     let screen_rect = if cfg!(windows) {
         druid::Screen::get_display_rect()
     } else {
-        Rect::new(0_f64, 0_f64, 1600_f64, 2000_f64)
+        Rect::new(0_f64, 0_f64, 1600_f64, 1000_f64)
     };
     let win_height = screen_rect.height() * 0.777;
 
