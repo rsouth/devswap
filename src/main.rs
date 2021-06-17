@@ -8,9 +8,9 @@ extern crate lazy_static;
 
 use std::thread;
 
-use druid::{AppLauncher, ExtEventSink, Rect, Selector, Target, WindowDesc, WindowId};
+use druid::{AppLauncher, ExtEventSink, Rect, Target, WindowDesc, WindowId};
 
-use crate::app_delegate::Delegate;
+use crate::app_delegate::{Delegate, GLOBAL_HOT_KEY};
 use crate::config::Settings;
 use crate::data::AppState;
 
@@ -20,11 +20,8 @@ mod command_box;
 mod config;
 mod data;
 mod document;
+mod textarea_controller;
 mod view;
-
-const GLOBAL_HOT_KEY: Selector<WindowId> = Selector::new("dev.untitled1.toggle-window-hotkey");
-const ESC_HOT_KEY: Selector = Selector::new("dev.untitled1.esc-hotkey");
-const EXEC_CMD: Selector<Option<String>> = Selector::new("dev.untitled1.execute-command");
 
 pub fn main() {
     let screen_rect = if cfg!(windows) {

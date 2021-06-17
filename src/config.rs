@@ -1,4 +1,4 @@
-use crate::document::Header;
+use crate::document::{DocType, Header};
 use druid::{im, Data};
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
@@ -99,6 +99,16 @@ impl Settings {
 
     pub fn pop_doc(&mut self) -> Option<Header> {
         self.document_stack.pop_front().or(None)
+    }
+
+    pub fn current_doc_filename(&self) -> Option<String> {
+        match self.document_stack.front() {
+            Some(h) => match &h.doc_type {
+                DocType::FileBased(s) => Some(s.to_string()),
+                _ => None,
+            },
+            None => None,
+        }
     }
 }
 
