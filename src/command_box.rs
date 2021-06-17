@@ -1,7 +1,6 @@
-use crate::{ESC_HOT_KEY, EXEC_CMD};
+use crate::app_delegate::{ESC_HOT_KEY, EXEC_CMD};
 use druid::widget::{Controller, TextBox};
 use druid::{Env, Event, EventCtx, KbKey, Target, Widget};
-
 
 pub(crate) struct CommandBoxController;
 impl Default for CommandBoxController {

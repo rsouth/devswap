@@ -2,11 +2,13 @@ mod insert_mode;
 pub mod new_project;
 mod save_settings;
 mod show_help;
+mod write_file;
 
 use crate::command::insert_mode::InsertMode;
 use crate::command::new_project::NewProject;
 use crate::command::save_settings::SaveSettings;
 use crate::command::show_help::ShowHelp;
+use crate::command::write_file::WriteFile;
 use crate::command::Identity::{Parameterised, Simple};
 use crate::data::AppState;
 use druid::DelegateCtx;
@@ -18,15 +20,17 @@ lazy_static! {
     static ref CMD_NEW_PROJ: Identity = Parameterised(":n".to_string(), ":new".to_string());
     static ref CMD_SAVE_SETTINGS: Identity = Parameterised(":ws".to_string(), ":write-settings".to_string());
     static ref CMD_SHOW_HELP: Identity = Parameterised(":h".to_string(), ":help".to_string());
-    
+
+    static ref CMD_WRITE_FILE: Identity = Parameterised(":w".to_string(), ":write".to_string());
+
     static ref CMD_INSERT_MODE: Identity = Simple("i".to_string());
 }
 
 /// `Identity` defines an `Executable`.
 ///
 /// There are 2 types of command:
-/// - `ColonPrefixed` e.g. ':n' or ':new'
-/// - `SingleChar`    e.g i or ↑
+/// - `Parameterised` e.g. ':n' or ':new'
+/// - `Simple`    e.g i or ↑
 #[derive(Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
 pub enum Identity {
     Simple(String),
@@ -102,6 +106,9 @@ pub fn resolve<'r>(
             } else if CMD_SHOW_HELP.matches(&selector) {
                 println!("Got Show Help Command");
                 Ok(Box::new(ShowHelp::new(app_data)))
+            } else if CMD_WRITE_FILE.matches(&selector) {
+                println!("Got Write File Command");
+                Ok(Box::new(WriteFile::new(app_data)))
             } else {
                 Err(ParsingError)
             }

@@ -90,8 +90,6 @@ impl Executable for NewProject<'_> {
                             let path_string = os_string.to_str().unwrap_or("").to_string();
                             let hdr = Header::new(DocType::FileBased(path_string));
 
-                            // let x = self._app_data;
-
                             self.app_data.push_doc(&hdr);
 
                             Ok(123)
