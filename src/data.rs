@@ -1,6 +1,7 @@
 use crate::config;
 use crate::config::Settings;
 use crate::document::{DocType, Header};
+use core::fmt;
 use druid::Data;
 use druid::Lens;
 
@@ -20,6 +21,13 @@ pub enum Mode {
     Insert,
     Command,
     // Render,
+}
+
+impl fmt::Display for Mode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let s = format!("{:?}", self);
+        write!(f, "{}", s.chars().nth(0).unwrap())
+    }
 }
 
 impl Default for AppState {

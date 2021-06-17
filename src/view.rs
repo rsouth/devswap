@@ -54,7 +54,7 @@ fn command_row() -> impl Widget<AppState> {
         .with_default_spacer()
         .with_child(
             // TODO Lens in to AppData::status of some kind (window status? command status?)
-            Label::new("Status Text".to_string())
-                .with_font(FontDescriptor::new(FontFamily::MONOSPACE)),
+            Label::new(|data: &AppState, _env: &_| format!("[{}]", data.mode))
+                .with_font(FontDescriptor::new(FontFamily::MONOSPACE)), // .lens(AppState::mode),
         )
 }
