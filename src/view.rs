@@ -1,4 +1,5 @@
 use crate::command_box::CommandBoxController;
+use crate::textarea_controller::TextAreaController;
 use crate::AppState;
 use druid::widget::{CrossAxisAlignment, Flex, FlexParams, Label, TextBox};
 use druid::{FontDescriptor, FontFamily, Insets, Widget, WidgetExt};
@@ -34,7 +35,10 @@ fn header_row() -> impl Widget<AppState> {
 }
 
 fn text_area() -> impl Widget<AppState> {
-    TextBox::multiline().lens(AppState::current_text).expand()
+    TextBox::multiline()
+        .controller(TextAreaController::default())
+        .lens(AppState::current_text)
+        .expand()
 }
 
 fn command_row() -> impl Widget<AppState> {

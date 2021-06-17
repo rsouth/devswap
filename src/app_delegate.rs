@@ -1,12 +1,16 @@
 use druid::commands::CONFIGURE_WINDOW;
 use druid::{
-    AppDelegate, Command, DelegateCtx, Env, Event, Handled, HotKey, KbKey, Point, Target,
+    AppDelegate, Command, DelegateCtx, Env, Event, Handled, HotKey, KbKey, Point, Selector, Target,
     WindowConfig, WindowId,
 };
 
+use crate::command;
 use crate::config::{ProjectSettings, Settings};
 use crate::data::AppState;
-use crate::{command, ESC_HOT_KEY, EXEC_CMD, GLOBAL_HOT_KEY};
+
+pub const GLOBAL_HOT_KEY: Selector<WindowId> = Selector::new("dev.untitled1.toggle-window-hotkey");
+pub const ESC_HOT_KEY: Selector = Selector::new("dev.untitled1.esc-hotkey");
+pub const EXEC_CMD: Selector<Option<String>> = Selector::new("dev.untitled1.execute-command");
 
 pub(crate) struct Delegate {
     _window_id: WindowId,
@@ -62,7 +66,6 @@ impl AppDelegate<AppState> for Delegate {
                 });
                 ctx.submit_command(CONFIGURE_WINDOW.with(wc).to(*number));
             }
-
             Handled::Yes
         } else if let Some(payload) = cmd.get(EXEC_CMD) {
             data.command_text.clear();
@@ -71,7 +74,7 @@ impl AppDelegate<AppState> for Delegate {
                     data.add_to_command_history(p);
                     return match command::resolve(p.to_string(), ctx, data) {
                         Ok(mut ec) => {
-                            println!("Executing EC");
+                            println!("Executing EC: {}", p);
                             ec.execute().map_or(Handled::No, |d| {
                                 println!("Command executed in {}\u{3bc}s", d);
                                 Handled::Yes

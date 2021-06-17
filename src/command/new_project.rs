@@ -3,6 +3,7 @@ use druid::DelegateCtx;
 use crate::command::{Executable, ExecutionError, HasArguments};
 use crate::data;
 use crate::data::AppState;
+use crate::document::{DocType, Header};
 use std::fs::try_exists;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -10,7 +11,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 pub(crate) struct NewProject<'r> {
     file_name: String,
     args: String,
-    _app_data: &'r AppState,
+    app_data: &'r mut AppState,
     _ctx: &'r DelegateCtx<'r>,
 }
 
@@ -24,7 +25,7 @@ impl<'r> NewProject<'r> {
         NewProject {
             file_name: file_name.into(),
             args,
-            _app_data: app_data,
+            app_data: app_data,
             _ctx: ctx,
         }
     }
@@ -83,6 +84,14 @@ impl Executable for NewProject<'_> {
                         let pth = Path::new(&n);
                         if let Ok(ss) = std::fs::File::create(pth) {
                             println!("Created file {:?}", ss);
+
+                            // todo  ...  :vomit:
+                            let os_string = pth.as_os_str().to_os_string();
+                            let path_string = os_string.to_str().unwrap_or("").to_string();
+                            let hdr = Header::new(DocType::FileBased(path_string));
+
+                            self.app_data.push_doc(&hdr);
+
                             Ok(123)
                         } else {
                             Err(ExecutionError)
