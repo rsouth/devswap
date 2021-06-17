@@ -1,4 +1,5 @@
-use crate::app_delegate::{ESC_HOT_KEY, EXEC_CMD};
+use crate::app_delegate::{ESC_HOT_KEY, EXEC_CMD, TOGGLE_MODE_CMD};
+use crate::data::Mode;
 use druid::widget::{Controller, TextBox};
 use druid::{Env, Event, EventCtx, KbKey, Target, Widget};
 
@@ -22,6 +23,7 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
             // Esc to switch to Command mode
             Event::Command(x) if x.is(ESC_HOT_KEY) => {
                 println!("Entering Command mode");
+                ctx.submit_command(TOGGLE_MODE_CMD.with(Mode::Command).to(Target::Auto));
                 ctx.request_focus();
             }
 
@@ -37,7 +39,7 @@ impl Controller<String, TextBox<String>> for CommandBoxController {
             Event::KeyDown(key_event) if key_event.key == KbKey::Character("i".to_string()) => {
                 if data.is_empty() {
                     println!("command box event(i) -> {:?}", key_event);
-                    ctx.submit_command(EXEC_CMD.with(Some("i".to_string())).to(Target::Auto));
+                    ctx.submit_command(TOGGLE_MODE_CMD.with(Mode::Insert).to(Target::Auto));
                     ctx.set_handled();
                 }
             }

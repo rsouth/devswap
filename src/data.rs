@@ -6,12 +6,20 @@ use druid::Lens;
 
 #[derive(Debug, Clone, Data, Lens)]
 pub struct AppState {
+    pub(crate) mode: Mode,
     settings: config::Settings,
     display_window_x: f64,
     display_window_y: f64,
     window_visible: bool,
     pub(crate) current_text: String,
     pub(crate) command_text: String,
+}
+
+#[derive(Debug, Clone, Data, Eq, PartialEq)]
+pub enum Mode {
+    Insert,
+    Command,
+    // Render,
 }
 
 impl Default for AppState {
@@ -23,6 +31,7 @@ impl Default for AppState {
             window_visible: true,
             current_text: "".to_string(),
             command_text: "".to_string(),
+            mode: Mode::Insert,
         }
     }
 }

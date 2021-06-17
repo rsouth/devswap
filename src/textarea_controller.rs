@@ -1,4 +1,5 @@
-use crate::app_delegate::EXEC_CMD;
+use crate::app_delegate::{EXEC_CMD, TOGGLE_MODE_CMD};
+use crate::data::Mode;
 use druid::widget::{Controller, TextBox};
 use druid::{Env, Event, EventCtx, KbKey, KeyEvent, Modifiers, Target, Widget};
 
@@ -23,6 +24,18 @@ impl Controller<String, TextBox<String>> for TextAreaController {
                 println!("command for ctrl-s");
                 ctx.submit_command(EXEC_CMD.with(Some(":w".to_string())).to(Target::Auto));
                 ctx.set_handled();
+            }
+            Event::Command(c) => {
+                println!("...");
+                if let Some(cc) = c.get(TOGGLE_MODE_CMD) {
+                    match cc {
+                        Mode::Insert => {
+                            println!("switching to insert mode.");
+                            ctx.request_focus();
+                        }
+                        _ => {}
+                    }
+                }
             }
             _ => child.event(ctx, event, data, env),
         }

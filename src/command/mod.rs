@@ -96,6 +96,7 @@ pub fn resolve<'r>(
         Ok(selector) => {
             if CMD_NEW_PROJ.matches(&selector) {
                 println!("Found New Project Command");
+                // todo why is this 'filename'?
                 Ok(Box::new(NewProject::new("filename", id, app_data, ctx)))
             } else if CMD_INSERT_MODE.matches(&selector) {
                 println!("Found Insert Mode Command");

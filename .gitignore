@@ -11,3 +11,4 @@ Cargo.lock
 
 .idea/
 devswap-settings.json
+*.devswap

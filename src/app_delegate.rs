@@ -6,11 +6,12 @@ use druid::{
 
 use crate::command;
 use crate::config::{ProjectSettings, Settings};
-use crate::data::AppState;
+use crate::data::{AppState, Mode};
 
 pub const GLOBAL_HOT_KEY: Selector<WindowId> = Selector::new("dev.untitled1.toggle-window-hotkey");
 pub const ESC_HOT_KEY: Selector = Selector::new("dev.untitled1.esc-hotkey");
 pub const EXEC_CMD: Selector<Option<String>> = Selector::new("dev.untitled1.execute-command");
+pub const TOGGLE_MODE_CMD: Selector<Mode> = Selector::new("dev.untitled1.toggle-mode");
 
 pub(crate) struct Delegate {
     _window_id: WindowId,
@@ -88,6 +89,14 @@ impl AppDelegate<AppState> for Delegate {
                 }
                 None => Handled::No,
             }
+        } else if let Some(mode) = cmd.get(TOGGLE_MODE_CMD) {
+            if mode != &data.mode {
+                println!("Toggling mode from {:?} to {:?}", data.mode, mode);
+                data.mode = mode.clone();
+            } else {
+                println!("Mode is already {:?}, not toggling", mode);
+            }
+            Handled::No
         } else {
             Handled::No
         }
